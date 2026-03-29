@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Dinnano"/>
+<meta name="theme-color" content="#C8001A"/>
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAADa0lEQVR4nO3U0ZEbORAFwbXjbJZh59WdZIFAcmZAdGVH5Ke4xFMFf/79+ec/mOJn9xeAKwmaUQTNKIJmFEEziqAZRdCMImhGETSjCJpRBM0ogmYUQTOKoBlF0IwiaEYRNKMI+iF/bvd3KBD0DV653d91GkFf5Irb/YYJBH2BK2/3W04n6A/cebvfdipBv+mJ2/3GEwn6DU/e7reeRtAv2nG733wSQb/okygFfT9Bv+DqCEV9PUEvujM8UV9H0IvuDk7Q1xD0oidiE/TnBL3gqV/Pp/7OZIJe8GRkgv6MoBcI+hyCXiDocwh6gaDPIei/2BGYqN8n6AV+oc8h6AWCPoegFwj6HIJeIOhzCHrByp30dyYT9KJvCHr3BicQ9KK7fz3v/vwKQS9avW/77BpBv+CV2/F5CPpl796n/5Y1gn7Rjtv95pMI+g1i/l6CfpOYv5OgPyDm7yPoCwj5ewj6ImL+DoK+gYj3eTxo1ztBu1EnaDfqBO1GnaDdqBO0G3WCdqNO0G7UCdqNOkG7USdoN+oE7UadoN2oE7QbdYJ2o2500HCnrwv69/3iLLubETSCFjSCFnTC7mYEjaAFjaAFnbC7GUEjaEEjaEEn7G7m1KCvuO3/+RtdcYK+MPSPb/cb7Hc/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9hN0RGU/QUdU9jsmaFghaEYRNKMImlEEzSiCZhRBM4qgGUXQjCJoRhE0owiaUQTNKIJmFEEziqAZRdCMImhGETSjCJpRBM0ogmYUQTOKoBlF0IwiaEYRNKMImlEEzSiCZhRBM8r/m4LM3AKs1vsAAAAASUVORK5CYII="/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23C8001A'/%3E%3Crect x='4' y='10' width='24' height='3' rx='1.5' fill='white'/%3E%3Crect x='6' y='13' width='20' height='2' rx='1' fill='rgba(255,255,255,0.6)'/%3E%3Crect x='9' y='15' width='3' height='12' rx='1.5' fill='white'/%3E%3Crect x='20' y='15' width='3' height='12' rx='1.5' fill='white'/%3E%3Ccircle cx='16' cy='7' r='3.5' fill='white'/%3E%3Ccircle cx='16' cy='7' r='2' fill='%23C8001A'/%3E%3C/svg%3E"/>
+<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Dinnano CRM&quot;,&quot;short_name&quot;:&quot;Dinnano&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#C8001A&quot;,&quot;theme_color&quot;:&quot;#C8001A&quot;,&quot;start_url&quot;:&quot;.&quot;}"/>
+<title>Dinnano CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ========== FIREBASE REALTIME DB SYNC ==========
+// Using dynamic import so this works in a plain <script> context alongside global vars
+window._fbApp = null;
+window._fbDb  = null;
+window._fbRef = null;
+window._fbConnected = false;
+window._fbUnsubscribe = null;
+
+window.initFirebase = async function(config){
+  try {
+    // If already connected with same project, skip re-init
+    if(window._fbConnected && window._fbApp) return true;
+
+    const { initializeApp, getApps, getApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const { getDatabase, ref, onValue, set } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+
+    window._fbApp = getApps().length ? getApp() : initializeApp(config);
+    window._fbDb  = getDatabase(window._fbApp);
+    window._fbRef = ref(window._fbDb, 'dinnano');
+    window._fbConnected = true;
+
+    // Store set/ref so fbPush can use them
+    window._fbSet = set;
+
+    // Real-time listener — Firebase is source of truth
+    if(window._fbUnsubscribe) window._fbUnsubscribe();
+    window._fbUnsubscribe = onValue(window._fbRef, (snap)=>{
+      const remote = snap.val();
+      const syncEl = document.getElementById('fb-sync-status');
+      if(syncEl) syncEl.textContent = '🟢 เชื่อมต่อแล้ว — อัปเดต '+new Date().toLocaleTimeString('th-TH');
+
+      if(!remote) return; // empty DB — nothing to sync down
+
+      // Overwrite local with remote (remote = shared truth)
+      if(Array.isArray(remote.records))  { records    = remote.records;    localStorage.setItem('dn_rec', JSON.stringify(records)); }
+      if(remote.memberData && typeof remote.memberData==='object') { memberData  = remote.memberData; localStorage.setItem('dn_mem', JSON.stringify(memberData)); }
+      if(remote.settings && typeof remote.settings==='object'){
+        const rs = remote.settings;
+        if(rs.shops)      settings.shops      = rs.shops;
+        if(rs.channels)   settings.channels   = rs.channels;
+        if(rs.withWhom)   settings.withWhom   = rs.withWhom;
+        if(rs.localAreas) settings.localAreas = rs.localAreas;
+        // intentionally NOT overwriting adminPw / sheetsUrl / firebaseConfig from remote
+      }
+
+      // Refresh the currently visible page
+      const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
+      if(activePage==='dashboard'){ renderDashboard(); }
+      if(activePage==='member')   { renderMemberSummary(); }
+      if(activePage==='admin' && isAdmin){ renderAdmin(); }
+      renderDashboardTodayList();
+    }, (err)=>{
+      console.error('Firebase listen error', err);
+      const syncEl = document.getElementById('fb-sync-status');
+      if(syncEl) syncEl.textContent = '🔴 เชื่อมต่อไม่ได้: '+err.message;
+    });
+
+    return true;
+  } catch(e){
+    console.error('Firebase init error', e);
+    const syncEl = document.getElementById('fb-sync-status');
+    if(syncEl) syncEl.textContent = '🔴 Error: '+e.message;
+    return false;
+  }
+};
+
+window.fbPush = async function(){
+  if(!window._fbConnected || !window._fbRef || !window._fbSet) return;
+  try {
+    await window._fbSet(window._fbRef, {
+      records: records,
+      memberData: memberData,
+      settings: {
+        shops: settings.shops,
+        channels: settings.channels,
+        withWhom: settings.withWhom,
+        localAreas: settings.localAreas
+      }
+    });
+  } catch(e){ console.error('Firebase push error', e); }
+};
+</script>
+<style>
+:root{
+  --red:#C8001A;--red-dark:#9A0013;--red-deep:#6B000D;
+  --red-light:#FFF0F2;--red-mid:#E8001F;
+  --black:#111;--gray:#444;--gray2:#777;--gray3:#bbb;
+  --bg:#F7F5F0;--card:#fff;--border:#E5E0D8;
+  --accent:#1a1a1a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--black);font-size:14px;-webkit-font-smoothing:antialiased}
+
+/* ===== SPLASH / LOGIN ===== */
+#splash{position:fixed;inset:0;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .5s}
+#splash.hide{opacity:0;pointer-events:none}
+.splash-mon{font-family:'Noto Serif JP',serif;font-size:13px;color:rgba(255,255,255,.5);letter-spacing:.3em;margin-bottom:20px;text-transform:uppercase}
+.splash-logo{width:120px;height:120px;position:relative;margin-bottom:28px}
+.splash-logo svg{width:100%;height:100%}
+.splash-title{font-family:'Noto Serif JP',serif;font-size:28px;font-weight:900;color:#fff;letter-spacing:.1em;margin-bottom:4px}
+.splash-sub{font-size:12px;color:rgba(255,255,255,.6);letter-spacing:.2em;margin-bottom:48px}
+
+/* ===== HEADER (top bar — logo + admin btn only) ===== */
+.app-header{background:var(--red);display:flex;align-items:center;height:52px;padding:0 14px;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.header-logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex:1}
+.header-logo svg{width:32px;height:32px;flex-shrink:0}
+.header-logo-text{font-family:'Noto Serif JP',serif;font-size:16px;font-weight:900;color:#fff;letter-spacing:.08em}
+.header-logo-text span{color:rgba(255,255,255,.55)}
+.role-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;letter-spacing:.05em;margin-left:6px}
+.role-staff{background:rgba(255,255,255,.18);color:#fff}
+.role-admin{background:#fff;color:var(--red)}
+/* hide top nav — replaced by bottom bar */
+.nav{display:none}
+.logout-btn{padding:5px 12px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:500;white-space:nowrap}
+.logout-btn:hover{background:rgba(255,255,255,.25)}
+
+/* ===== BOTTOM NAV BAR ===== */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:64px;background:var(--red);display:none;align-items:stretch;z-index:300;box-shadow:0 -2px 12px rgba(0,0,0,.25);padding-bottom:env(safe-area-inset-bottom)}
+.bottom-nav.visible{display:flex}
+.bot-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:rgba(255,255,255,.55);border:none;background:none;font-family:'Noto Sans Thai',sans-serif;transition:all .15s;padding:6px 0;border-top:3px solid transparent;-webkit-tap-highlight-color:transparent}
+.bot-tab.active{color:#fff;border-top-color:#fff;background:rgba(255,255,255,.06)}
+.bot-tab:hover{color:#fff;background:rgba(255,255,255,.1)}
+.bot-tab-icon{font-size:20px;line-height:1}
+.bot-tab-label{font-size:10px;font-weight:600;letter-spacing:.04em}
+
+/* ===== MAIN ===== */
+.main{max-width:1080px;margin:0 auto;padding:20px 16px;padding-bottom:100px}
+/* extra space at bottom of every page so last element clears the nav bar */
+.page{padding-bottom:16px}
+.page{display:none}
+.page.active{display:block}
+
+/* ===== CARDS ===== */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:600;color:var(--gray2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.card-title::before{content:'';display:block;width:3px;height:12px;background:var(--red);border-radius:2px}
+
+/* ===== FORM FIELDS ===== */
+.row{display:grid;gap:10px;margin-bottom:10px}
+.row-2{grid-template-columns:1fr 1fr}
+.row-3{grid-template-columns:1fr 1fr 1fr}
+.field label{font-size:11px;font-weight:600;color:var(--gray2);display:block;margin-bottom:4px;letter-spacing:.04em}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:#fff;color:var(--black);font-family:'Noto Sans Thai',sans-serif;transition:border .15s,box-shadow .15s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(200,0,26,.1)}
+.field textarea{resize:vertical;min-height:72px}
+
+/* ===== ORIGIN INPUT (smart) ===== */
+.origin-wrap{position:relative}
+.origin-input{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:#fff;color:var(--black);font-family:'Noto Sans Thai',sans-serif}
+.origin-input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(200,0,26,.1)}
+.origin-tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;margin-top:5px}
+.tag-local{background:#FFF0F2;color:var(--red)}
+.tag-thai{background:#FFF8E1;color:#B45000}
+.tag-inter{background:#E8F0FE;color:#1A5FA5}
+
+/* ===== CHIPS ===== */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.chip{padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:#f8f8f8;color:var(--gray2);transition:all .15s;user-select:none;font-weight:500}
+.chip.selected{background:var(--red-light);color:var(--red);border-color:var(--red);font-weight:600}
+.chip:hover:not(.selected){border-color:#aaa;background:#fff}
+
+/* ===== BUTTONS ===== */
+.btn{padding:9px 20px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-weight:600;transition:all .15s;letter-spacing:.02em}
+.btn-primary{background:var(--red);color:#fff;border:none}
+.btn-primary:hover{background:var(--red-dark)}
+.btn-secondary{background:#fff;color:var(--gray);border:1px solid var(--border)}
+.btn-secondary:hover{background:#f5f5f5}
+.btn-danger{background:#fff;color:#c00;border:1px solid #fcc}
+.btn-danger:hover{background:#fff0f0}
+.btn-row{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;margin-bottom:8px}
+
+/* ===== INFO BOX ===== */
+.info-box{background:var(--red-light);border:1px solid rgba(200,0,26,.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.info-box-gray{background:#f0f0f0;border-color:#ddd;color:var(--gray)}
+
+/* ===== BADGES ===== */
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.badge-red{background:var(--red-light);color:var(--red)}
+.badge-amber{background:#FFF8E1;color:#B45000}
+.badge-blue{background:#E8F0FE;color:#1A5FA5}
+.badge-green{background:#E8F5E9;color:#1B6E2F}
+.badge-gray{background:#f0f0f0;color:#555}
+
+/* ===== METRICS ===== */
+.metric-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.metric{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px;text-align:center;position:relative;overflow:hidden}
+.metric::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--red)}
+.metric-val{font-size:24px;font-weight:700;color:var(--black);font-family:'Noto Serif JP',serif}
+.metric-label{font-size:10px;color:var(--gray2);margin-top:2px;font-weight:500}
+
+/* ===== PERIOD TABS ===== */
+.period-tabs{display:flex;gap:6px;margin-bottom:16px}
+.period-tab{padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--gray2);font-family:'Noto Sans Thai',sans-serif;font-weight:500}
+.period-tab.active{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* ===== CHARTS ===== */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chart-wrap{position:relative;width:100%;height:230px}
+.chart-wrap-sm{position:relative;width:100%;height:185px}
+.legend-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.leg{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--gray2)}
+.leg-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+
+/* ===== SUB NAV ===== */
+.sub-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.sub-tab{padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--gray2);font-family:inherit;font-weight:500}
+.sub-tab.active{background:var(--red-light);color:var(--red);border-color:var(--red)}
+
+/* ===== TABLE ===== */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:8px 10px;border-bottom:2px solid var(--border);font-weight:600;color:var(--gray2);white-space:nowrap;background:#FAFAF8;font-size:11px}
+td{padding:7px 10px;border-bottom:1px solid #f0ede8;color:var(--black);vertical-align:top}
+tr:hover td{background:#FDFAF8}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--red);color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;box-shadow:0 4px 16px rgba(200,0,26,.35)}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* ===== MODAL ===== */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:14px;padding:22px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-title{font-family:'Noto Serif JP',serif;font-size:16px;font-weight:700;margin-bottom:16px;color:var(--black)}
+.modal-close{float:right;background:none;border:none;font-size:18px;cursor:pointer;color:var(--gray2);line-height:1}
+
+/* ===== ADMIN SETTINGS ===== */
+.settings-list{list-style:none}
+.settings-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}
+.settings-item:last-child{border-bottom:none}
+.settings-item span{font-size:13px}
+.icon-btn{background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:6px;font-size:13px;color:var(--gray2)}
+.icon-btn:hover{background:#f0f0f0}
+.icon-btn.del:hover{background:#fff0f0;color:#c00}
+
+/* ===== DIVIDER ===== */
+.divider{height:1px;background:var(--border);margin:14px 0}
+
+/* ===== SECTION TITLE ===== */
+.section-label{font-size:11px;font-weight:600;color:var(--gray2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;margin-top:4px;display:flex;align-items:center;gap:6px}
+.section-label::before{content:'';display:block;width:3px;height:11px;background:var(--red);border-radius:2px}
+
+/* ===== LOGIN ===== */
+#login-screen{position:fixed;inset:0;background:var(--red);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:400;padding:20px}
+#login-screen.open{display:flex}
+.login-box{background:#fff;border-radius:16px;padding:28px 24px;width:100%;max-width:340px}
+.login-logo{font-family:'Noto Serif JP',serif;font-size:22px;font-weight:900;color:var(--red);text-align:center;margin-bottom:4px;letter-spacing:.08em}
+.login-sub{font-size:11px;color:var(--gray2);text-align:center;margin-bottom:20px;letter-spacing:.1em}
+.login-box .field input{border:1.5px solid var(--border)}
+.login-err{color:var(--red);font-size:12px;text-align:center;margin-top:8px;min-height:16px}
+
+/* ===== EDIT RECORD MODAL ===== */
+.edit-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:680px){
+  .row-2,.row-3{grid-template-columns:1fr}
+  .two-col{grid-template-columns:1fr}
+  .metric-grid{grid-template-columns:repeat(2,1fr)}
+  .nav-tab{padding:0 8px;font-size:11px}
+  .main{padding:14px 10px}
+  .header-logo-text{font-size:14px}
+}
+
+/* ===== JAPANESE PATTERN ACCENT ===== */
+.jp-accent{background-image:repeating-linear-gradient(0deg,transparent,transparent 23px,rgba(200,0,26,.06) 24px),repeating-linear-gradient(90deg,transparent,transparent 23px,rgba(200,0,26,.06) 24px)}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-mon">COMMUNITY</div>
+  <div class="splash-logo">
+    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="58" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+      <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+      <!-- Torii gate style -->
+      <rect x="20" y="38" width="80" height="6" rx="3" fill="#fff"/>
+      <rect x="26" y="44" width="68" height="4" rx="2" fill="rgba(255,255,255,.6)"/>
+      <rect x="32" y="48" width="8" height="44" rx="4" fill="#fff"/>
+      <rect x="80" y="48" width="8" height="44" rx="4" fill="#fff"/>
+      <circle cx="60" cy="28" r="10" fill="#fff"/>
+      <circle cx="60" cy="28" r="6" fill="var(--red)"/>
+    </svg>
+  </div>
+  <div class="splash-title">DINNANO</div>
+  <div class="splash-sub">COMMUNITY · CRM</div>
+</div>
+
+<!-- LOGIN (admin) -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">DINNANO</div>
+    <div class="login-sub">ADMIN LOGIN</div>
+    <div class="field"><label>รหัสผ่านผู้ดูแล</label><input type="password" id="admin-pw-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAdminLogin()"/></div>
+    <div class="login-err" id="login-err"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="closeAdminLogin()">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="doAdminLogin()">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="app-header" id="appHeader" style="display:none">
+  <div class="header-logo" onclick="showPage('form')">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="10" width="24" height="2.5" rx="1.2" fill="#fff"/>
+      <rect x="6" y="12.5" width="20" height="2" rx="1" fill="rgba(255,255,255,.55)"/>
+      <rect x="9" y="14.5" width="2.5" height="13" rx="1.2" fill="#fff"/>
+      <rect x="20.5" y="14.5" width="2.5" height="13" rx="1.2" fill="#fff"/>
+      <circle cx="16" cy="6" r="3.2" fill="#fff"/>
+      <circle cx="16" cy="6" r="1.8" fill="var(--red)"/>
+    </svg>
+    <span class="header-logo-text">DINNANO <span>CRM</span></span>
+    <span class="role-badge" id="header-role-badge">STAFF</span>
+  </div>
+  <nav class="nav" id="mainNav">
+    <div class="nav-tab active" onclick="showPage('form')">📋 บันทึก</div>
+    <div class="nav-tab" onclick="showPage('member')">🎯 สมาชิก</div>
+    <div class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</div>
+    <div class="nav-tab admin-only" onclick="showPage('admin')" style="display:none">🗂 แอดมิน</div>
+  </nav>
+  <button class="logout-btn" id="adminLogoutBtn" style="display:none" onclick="adminLogout()">ออกจากระบบ</button>
+  <button class="logout-btn" id="adminLoginBtn" onclick="openAdminLogin()" style="margin-left:8px">Admin</button>
+</div>
+
+<div class="main" id="mainContent" style="display:none">
+
+<!-- ==================== PAGE: FORM ==================== -->
+<div class="page active" id="page-form">
+  <div class="info-box jp-accent">
+    <span>📅</span><span>บันทึกข้อมูลลูกค้า — <strong id="today-date"></strong></span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">ข้อมูลทั่วไป</div>
+    <div class="row row-2">
+      <div class="field"><label>ชื่อลูกค้า (ถ้ามี)</label><input id="f-name" type="text" placeholder="เช่น คุณสมชาย"/></div>
+      <div class="field"><label>จำนวนผู้มา (ท่าน)</label><input id="f-count" type="number" min="1" value="1"/></div>
+    </div>
+    <div class="row row-2">
+      <div class="field"><label>อาชีพ (พิมพ์ได้เลย)</label><input id="f-job" type="text" placeholder="เช่น นักเรียน, ธุรกิจ, ข้าราชการ..."/></div>
+      <div class="field">
+          <label>ช่วงอายุ</label>
+          <select id="f-age">
+            <option value="">— เลือก —</option>
+            <option value="เด็ก/วัยรุ่น (ต่ำกว่า 18 ปี)">เด็ก/วัยรุ่น (ต่ำกว่า 18 ปี)</option>
+            <option value="วัยเรียน/เริ่มทำงาน (18–25 ปี)">วัยเรียน/เริ่มทำงาน (18–25 ปี)</option>
+            <option value="วัยทำงาน (26–40 ปี)">วัยทำงาน (26–40 ปี)</option>
+            <option value="วัยกลางคน (41–55 ปี)">วัยกลางคน (41–55 ปี)</option>
+            <option value="วัยอาวุโส (56 ปีขึ้นไป)">วัยอาวุโส (56 ปีขึ้นไป)</option>
+          </select>
+        </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">แหล่งที่มา</div>
+    <div class="field" style="margin-bottom:10px">
+      <label>พิมพ์จังหวัด/ประเทศ (ระบบจะจัดประเภทให้อัตโนมัติ)</label>
+      <div class="origin-wrap">
+        <input class="origin-input" id="f-origin-text" type="text" placeholder="เช่น คลองท่อม, ยะลา, กรุงเทพ, Malaysia, France..." oninput="classifyOrigin()"/>
+        <div id="origin-classified" style="min-height:22px"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>รู้จักร้านจากช่องทางใด (เลือกได้หลายข้อ)</label>
+      <div class="chips" id="chips-channel">
+        <div class="chip" onclick="toggleChip(this)">TikTok</div>
+        <div class="chip" onclick="toggleChip(this)">Facebook</div>
+        <div class="chip" onclick="toggleChip(this)">Instagram</div>
+        <div class="chip" onclick="toggleChip(this)">Google</div>
+        <div class="chip" onclick="toggleChip(this)">บอกต่อ</div>
+        <div class="chip" onclick="toggleChip(this)">ป้ายโฆษณา</div>
+        <div class="chip" onclick="toggleChip(this)">ทัวร์/เอเจนซี่</div>
+        <div class="chip" onclick="toggleChip(this)">อื่นๆ</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">การเยี่ยมชม</div>
+    <div class="row row-2">
+      <div class="field">
+        <label>มาครั้งนี้เป็น</label>
+        <select id="f-visit">
+          <option value="first">ครั้งแรก</option>
+          <option value="repeat">เคยมาแล้ว</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>มากับใคร</label>
+        <select id="f-with">
+          <option value="">— เลือก —</option>
+          <option>ครอบครัว</option>
+          <option>กรุ๊ปทัวร์</option>
+          <option>ทัวร์นักเรียน/ทัศนศึกษา</option>
+          <option>คู่รัก</option>
+          <option>เพื่อน</option>
+          <option>คนเดียว</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>สนใจบริการใดมากที่สุด (เลือกได้หลายข้อ)</label>
+      <div class="chips" id="chips-service"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">ข้อเสนอแนะ / คำติชม</div>
+    <div class="field"><textarea id="f-feedback" placeholder="บันทึกคำติชมจากลูกค้า..."></textarea></div>
+  </div>
+
+  <div class="btn-row" style="flex-direction:column;gap:10px">
+    <button class="btn btn-primary" onclick="saveRecord()" style="width:100%;padding:15px;font-size:16px;border-radius:12px;letter-spacing:.04em">บันทึกข้อมูล ✓</button>
+    <button class="btn btn-secondary" onclick="clearForm()" style="width:100%;padding:11px;font-size:13px">ล้างข้อมูล</button>
+  </div>
+</div>
+
+<!-- ==================== PAGE: MEMBER ==================== -->
+<div class="page" id="page-member">
+  <div class="info-box"><span>🎯</span><span>สมาชิก & พอยท์ — <strong id="today-date2"></strong></span></div>
+  <div class="sub-nav" id="memberSubNav"></div>
+  <div class="card">
+    <div class="card-title" id="member-shop-name">เลือกร้าน</div>
+    <div class="row row-2">
+      <div class="field"><label>สมัครสมาชิกวันนี้ (คน)</label><input type="number" min="0" value="0" id="m-new"/></div>
+      <div class="field"><label>แลกพอยท์วันนี้ (คน)</label><input type="number" min="0" value="0" id="m-redeem"/></div>
+    </div>
+    <div class="field"><label>หมายเหตุ</label><input type="text" id="m-note" placeholder="บันทึกเพิ่มเติม..."/></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="saveMember()">บันทึก ✓</button></div>
+  </div>
+  <div class="card">
+    <div class="card-title">สรุปวันนี้ — ทุกร้าน</div>
+    <div id="member-today-summary"></div>
+  </div>
+</div>
+
+<!-- ==================== PAGE: DASHBOARD ==================== -->
+<div class="page" id="page-dashboard">
+  <!-- Filter bar -->
+  <div class="card" style="padding:12px 16px;margin-bottom:14px">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px">
+      <div class="period-tabs" style="margin:0">
+        <button class="period-tab active" onclick="setPeriod('day',this)">วันนี้</button>
+        <button class="period-tab" onclick="setPeriod('month',this)">เดือนนี้</button>
+        <button class="period-tab" onclick="setPeriod('year',this)">ปีนี้</button>
+        <button class="period-tab" onclick="setPeriod('custom',this)">กำหนดเอง</button>
+      </div>
+      <div id="custom-range" style="display:none;display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">
+        <div class="field" style="margin:0"><label>จาก</label><input type="date" id="dash-from" onchange="renderDashboard()" style="padding:6px 10px;font-size:12px"/></div>
+        <div class="field" style="margin:0"><label>ถึง</label><input type="date" id="dash-to" onchange="renderDashboard()" style="padding:6px 10px;font-size:12px"/></div>
+      </div>
+      <div id="dash-range-label" style="font-size:12px;color:var(--gray2);margin-left:auto;align-self:center"></div>
+    </div>
+  </div>
+
+  <div class="metric-grid" id="dash-metrics"></div>
+
+  <!-- New vs Returning highlight -->
+  <div class="two-col" style="margin-bottom:14px">
+    <div class="card" style="display:flex;align-items:center;gap:16px;padding:16px 20px">
+      <div style="flex:1;text-align:center">
+        <div style="font-size:32px;font-weight:700;color:var(--red)" id="pct-new">0%</div>
+        <div style="font-size:11px;color:var(--gray2);margin-top:2px;font-weight:500">ลูกค้าใหม่</div>
+      </div>
+      <div style="width:1px;height:48px;background:var(--border)"></div>
+      <div style="flex:1;text-align:center">
+        <div style="font-size:32px;font-weight:700;color:#1A5FA5" id="pct-repeat">0%</div>
+        <div style="font-size:11px;color:var(--gray2);margin-top:2px;font-weight:500">ลูกค้าเก่า</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="legend-row" id="legend-visit"></div>
+      <div class="chart-wrap-sm"><canvas id="chart-visit"></canvas></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">ภูมิลำเนาลูกค้า</div>
+      <div class="legend-row" id="legend-origin"></div>
+      <div class="chart-wrap-sm"><canvas id="chart-origin"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">ช่องทางที่รู้จักร้าน</div>
+      <div class="legend-row" id="legend-channel"></div>
+      <div class="chart-wrap-sm"><canvas id="chart-channel"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">จังหวัด/ประเทศ (Top 12)</div>
+    <div class="chart-wrap" style="height:280px"><canvas id="chart-province"></canvas></div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">บริการที่สนใจ</div>
+      <div class="legend-row" id="legend-service"></div>
+      <div class="chart-wrap-sm"><canvas id="chart-service"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">มากับใคร</div>
+      <div class="legend-row" id="legend-with"></div>
+      <div class="chart-wrap-sm"><canvas id="chart-with"></canvas></div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">ช่วงอายุ</div>
+      <div class="legend-row" id="legend-age"></div>
+      <div class="chart-wrap-sm"><canvas id="chart-age"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">อาชีพ</div>
+      <div class="legend-row" id="legend-job"></div>
+      <div class="chart-wrap-sm"><canvas id="chart-job"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">สมาชิกใหม่ &amp; แลกพอยท์ — แยกร้าน</div>
+    <div class="chart-wrap"><canvas id="chart-member"></canvas></div>
+  </div>
+
+  <!-- TODAY'S CUSTOMER LIST -->
+  <div class="card" id="dash-today-list-card" style="margin-top:4px">
+    <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>รายชื่อลูกค้าวันนี้</span>
+      <span id="dash-today-count" style="font-size:12px;color:var(--gray2);font-weight:500;text-transform:none;letter-spacing:0"></span>
+    </div>
+    <div class="table-wrap">
+      <table id="dash-today-table">
+        <thead><tr>
+          <th>#</th><th>ชื่อ</th><th>ท่าน</th><th>ที่มา</th><th>ประเภท</th><th>ช่องทาง</th><th>บริการ</th><th>มากับ</th><th>เยี่ยมชม</th><th>เวลา</th>
+        </tr></thead>
+        <tbody id="dash-today-tbody"></tbody>
+      </table>
+    </div>
+    <div id="dash-today-empty" style="text-align:center;padding:32px;font-size:13px;color:#999;display:none">ยังไม่มีรายการวันนี้</div>
+  </div>
+</div>
+
+<!-- ==================== PAGE: ADMIN ==================== -->
+<div class="page" id="page-admin">
+  <div class="info-box"><span>🔐</span><span>โหมดแอดมิน — สามารถแก้ไขข้อมูลทั้งหมดได้</span></div>
+
+  <!-- TABS inside admin -->
+  <div class="sub-nav">
+    <div class="sub-tab active" onclick="showAdminTab('records')">📋 รายการลูกค้า</div>
+    <div class="sub-tab" onclick="showAdminTab('settings')">⚙️ ตั้งค่าระบบ</div>
+    <div class="sub-tab" onclick="showAdminTab('password')">🔑 เปลี่ยนรหัสผ่าน</div>
+  </div>
+
+  <!-- RECORDS TAB -->
+  <div id="admin-tab-records">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="font-size:13px;color:var(--gray2)" id="admin-record-count"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" onclick="exportCSV()" style="font-size:12px;padding:6px 14px">CSV ↓</button>
+        <button class="btn btn-danger" onclick="clearAll()" style="font-size:12px;padding:6px 14px">ลบทั้งหมด</button>
+      </div>
+    </div>
+    <!-- Date filter -->
+    <div class="card" style="padding:12px 16px;margin-bottom:12px">
+      <div class="row row-3" style="margin:0">
+        <div class="field"><label>กรองจากวันที่</label><input type="date" id="filter-from"/></div>
+        <div class="field"><label>ถึงวันที่</label><input type="date" id="filter-to"/></div>
+        <div class="field" style="display:flex;align-items:flex-end;gap:8px">
+          <button class="btn btn-primary" onclick="renderAdmin()" style="flex:1">กรอง</button>
+          <button class="btn btn-secondary" onclick="clearFilter()" style="flex:1">ทั้งหมด</button>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:0">
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>วันที่</th><th>ชื่อ</th><th>ท่าน</th><th>อาชีพ</th><th>อายุ</th>
+            <th>จังหวัด/ที่มา</th><th>ประเภท</th><th>ช่องทาง</th><th>บริการ</th><th>มากับ</th><th>เยี่ยมชม</th><th>ติชม</th><th>แก้ไข</th>
+          </tr></thead>
+          <tbody id="admin-tbody"></tbody>
+        </table>
+        <div id="admin-empty" style="text-align:center;padding:40px;font-size:13px;color:#999">ยังไม่มีข้อมูล</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS TAB -->
+  <div id="admin-tab-settings" style="display:none">
+    <!-- Firebase Realtime DB -->
+    <div class="card" style="margin-bottom:12px;border:2px solid var(--red)">
+      <div class="card-title">🔥 Firebase Realtime DB — Sync ทุกอุปกรณ์</div>
+      <div id="fb-sync-status" style="font-size:12px;color:var(--gray2);margin-bottom:10px;padding:8px 12px;background:#f8f8f8;border-radius:8px">⚪ ยังไม่ได้เชื่อมต่อ Firebase</div>
+      <div class="field" style="margin-bottom:8px">
+        <label>API Key</label><input id="fb-apiKey" type="text" placeholder="AIzaSy..."/>
+      </div>
+      <div class="row row-2">
+        <div class="field"><label>Project ID</label><input id="fb-projectId" type="text" placeholder="my-project-id"/></div>
+        <div class="field"><label>Database URL</label><input id="fb-dbUrl" type="text" placeholder="https://my-project-default-rtdb.firebaseio.com"/></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">
+        <button class="btn btn-primary" onclick="saveAndConnectFirebase()" style="font-size:12px;padding:7px 16px">🔗 เชื่อมต่อ Firebase</button>
+        <button class="btn btn-secondary" onclick="fbPushNow()" style="font-size:12px;padding:7px 16px">☁ Push ข้อมูลขึ้น Cloud</button>
+      </div>
+      <div style="margin-top:10px;padding:10px 12px;background:#FFF0F2;border-radius:8px;border:1px solid rgba(200,0,26,.2);font-size:11px;color:var(--red-dark);line-height:1.8">
+        📌 <strong>วิธีตั้งค่า Firebase ครั้งแรก:</strong><br>
+        1. ไปที่ <a href="https://console.firebase.google.com" target="_blank" style="color:var(--red)">console.firebase.google.com</a> → สร้างโปรเจกต์ใหม่<br>
+        2. ไปที่ Realtime Database → Create database → เลือก "Start in test mode"<br>
+        3. ไปที่ Project Settings → Your apps → Web app → Copy config<br>
+        4. วาง apiKey, projectId และ Database URL ด้านบน → กด "เชื่อมต่อ"<br>
+        5. แชร์ลิงก์ไฟล์นี้ให้พนักงาน — ทุกคนจะเห็นข้อมูลเดียวกัน real-time ✓
+      </div>
+    </div>
+    <!-- Google Sheets -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-title">🔗 เชื่อมต่อ Google Sheets</div>
+      <div class="field" style="margin-bottom:10px">
+        <label>Web App URL (จาก Apps Script)</label>
+        <input id="sheets-url" type="text" placeholder="https://script.google.com/macros/s/..."/>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-primary" onclick="saveSheetUrl()" style="font-size:12px;padding:7px 16px">บันทึก URL</button>
+        <button class="btn btn-secondary" id="sheets-push-btn" onclick="pushToSheets()" style="font-size:12px;padding:7px 16px">☁ ส่งไป Google Sheets</button>
+        <span id="last-sync-label" style="font-size:11px;color:var(--gray2);margin-left:4px"></span>
+      </div>
+      <div style="margin-top:10px;padding:10px 12px;background:#FAFAF8;border-radius:8px;border:1px solid var(--border);font-size:11px;color:var(--gray2);line-height:1.7">
+        📌 วิธีใช้: สร้าง Google Apps Script → วาง Code.gs จากไฟล์ที่ให้ → Deploy → Copy URL มาวางที่นี่
+      </div>
+    </div>
+    <div class="two-col">
+      <!-- Shops -->
+      <div class="card">
+        <div class="card-title">ร้าน / โซน</div>
+        <ul class="settings-list" id="settings-shops"></ul>
+        <div class="row row-2" style="margin-top:12px">
+          <div class="field"><input id="new-shop-icon" type="text" placeholder="Emoji เช่น 🍜" style="text-align:center"/></div>
+          <div class="field"><input id="new-shop-name" type="text" placeholder="ชื่อร้าน"/></div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="addShop()">+ เพิ่มร้าน</button>
+      </div>
+      <!-- Channels -->
+      <div class="card">
+        <div class="card-title">ช่องทางการรู้จัก</div>
+        <ul class="settings-list" id="settings-channels"></ul>
+        <div class="field" style="margin-top:12px"><input id="new-channel" type="text" placeholder="ช่องทางใหม่"/></div>
+        <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="addChannel()">+ เพิ่มช่องทาง</button>
+      </div>
+    </div>
+    <div class="two-col">
+      <!-- With whom -->
+      <div class="card">
+        <div class="card-title">มากับใคร</div>
+        <ul class="settings-list" id="settings-with"></ul>
+        <div class="field" style="margin-top:12px"><input id="new-with" type="text" placeholder="ประเภทใหม่"/></div>
+        <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="addWith()">+ เพิ่ม</button>
+      </div>
+      <!-- Province groups -->
+      <div class="card">
+        <div class="card-title">จังหวัดในจังหวัด (กระบี่)</div>
+        <div style="font-size:11px;color:var(--gray2);margin-bottom:8px">จังหวัดที่ถือว่า "ในจังหวัด" (นอกนั้นคือต่างจังหวัด)</div>
+        <ul class="settings-list" id="settings-local"></ul>
+        <div class="field" style="margin-top:12px"><input id="new-local" type="text" placeholder="เช่น เกาะลันตา, อ่าวนาง"/></div>
+        <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="addLocal()">+ เพิ่มพื้นที่</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSWORD TAB -->
+  <div id="admin-tab-password" style="display:none">
+    <div class="card" style="max-width:400px">
+      <div class="card-title">เปลี่ยนรหัสผ่านแอดมิน</div>
+      <div class="field"><label>รหัสผ่านปัจจุบัน</label><input type="password" id="pw-current" placeholder="••••••••"/></div>
+      <div class="field"><label>รหัสผ่านใหม่</label><input type="password" id="pw-new" placeholder="••••••••"/></div>
+      <div class="field"><label>ยืนยันรหัสผ่านใหม่</label><input type="password" id="pw-confirm" placeholder="••••••••"/></div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="changePassword()">เปลี่ยนรหัสผ่าน</button></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- BOTTOM NAV BAR -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bot-tab active" id="bot-form" onclick="showPage('form')">
+    <span class="bot-tab-icon">📋</span>
+    <span class="bot-tab-label">บันทึก</span>
+  </button>
+  <button class="bot-tab" id="bot-member" onclick="showPage('member')">
+    <span class="bot-tab-icon">🎯</span>
+    <span class="bot-tab-label">สมาชิก</span>
+  </button>
+  <button class="bot-tab" id="bot-dashboard" onclick="showPage('dashboard')">
+    <span class="bot-tab-icon">📊</span>
+    <span class="bot-tab-label">Dashboard</span>
+  </button>
+  <button class="bot-tab admin-only" id="bot-admin" onclick="showPage('admin')" style="display:none">
+    <span class="bot-tab-icon">🗂</span>
+    <span class="bot-tab-label">แอดมิน</span>
+  </button>
+</nav>
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeEditModal()">✕</button>
+    <div class="modal-title">แก้ไขข้อมูลลูกค้า</div>
+    <input type="hidden" id="edit-id"/>
+    <div class="edit-row">
+      <div class="field"><label>ชื่อ</label><input id="edit-name" type="text"/></div>
+      <div class="field"><label>จำนวน</label><input id="edit-count" type="number" min="1"/></div>
+    </div>
+    <div class="edit-row">
+      <div class="field"><label>อาชีพ</label><input id="edit-job" type="text"/></div>
+      <div class="field"><label>ช่วงอายุ</label>
+          <select id="edit-age">
+            <option value="">— เลือก —</option>
+            <option value="เด็ก/วัยรุ่น (ต่ำกว่า 18 ปี)">เด็ก/วัยรุ่น (ต่ำกว่า 18 ปี)</option>
+            <option value="วัยเรียน/เริ่มทำงาน (18–25 ปี)">วัยเรียน/เริ่มทำงาน (18–25 ปี)</option>
+            <option value="วัยทำงาน (26–40 ปี)">วัยทำงาน (26–40 ปี)</option>
+            <option value="วัยกลางคน (41–55 ปี)">วัยกลางคน (41–55 ปี)</option>
+            <option value="วัยอาวุโส (56 ปีขึ้นไป)">วัยอาวุโส (56 ปีขึ้นไป)</option>
+          </select>
+        </div>
+    </div>
+    <div class="field" style="margin-bottom:10px"><label>จังหวัด/ประเทศ</label><input id="edit-origin-text" type="text" oninput="classifyEditOrigin()"/><div id="edit-origin-classified" style="min-height:20px;margin-top:4px"></div></div>
+    <div class="edit-row">
+      <div class="field"><label>มาครั้ง</label><select id="edit-visit"><option value="first">ครั้งแรก</option><option value="repeat">เคยมา</option></select></div>
+      <div class="field"><label>มากับ</label><select id="edit-with" id="edit-with"></select></div>
+    </div>
+    <div class="field" style="margin-bottom:10px"><label>ช่องทาง (คั่นด้วย ,)</label><input id="edit-channels" type="text"/></div>
+    <div class="field" style="margin-bottom:10px"><label>บริการที่สนใจ (คั่นด้วย ,)</label><input id="edit-services" type="text"/></div>
+    <div class="field" style="margin-bottom:10px"><label>ติชม</label><textarea id="edit-feedback" style="min-height:60px"></textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-danger" onclick="deleteRecord()">ลบรายการนี้</button>
+      <button class="btn btn-secondary" onclick="closeEditModal()">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="saveEditRecord()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===================================================
+//  STATE & DEFAULTS
+// ===================================================
+const DEFAULT_SHOPS=[
+  {icon:'🏖',name:'Water Park'},
+  {icon:'🍣',name:'Japanese Restaurant'},
+  {icon:'🥘',name:'ครัวลูกโทะ'},
+  {icon:'☕',name:'Darussalam Cafe'},
+  {icon:'🏡',name:'Pool Villa'},
+  {icon:'🍚',name:'ข้าวต้มดินนาโนะ'},
+  {icon:'📚',name:'Learning Center'}
+];
+const DEFAULT_CHANNELS=['TikTok','Facebook','Instagram','Google','บอกต่อ','ป้ายโฆษณา','ทัวร์/เอเจนซี่','อื่นๆ'];
+const DEFAULT_WITH=['ครอบครัว','กรุ๊ปทัวร์','ทัวร์นักเรียน/ทัศนศึกษา','คู่รัก','เพื่อน','คนเดียว'];
+// districts/areas considered "local" (Krabi province)
+const DEFAULT_LOCAL_AREAS=['กระบี่','อ่าวนาง','คลองท่อม','เกาะลันตา','พนม','เหนือคลอง','ลำทับ','เขาพนม','ปลายพระยา'];
+// thai provinces list (not local, not inter)
+const THAI_PROVINCES=['กรุงเทพ','เชียงใหม่','เชียงราย','นครราชสีมา','ยะลา','ปัตตานี','นราธิวาส','สงขลา','พัทลุง','ตรัง','สตูล','นครศรีธรรมราช','สุราษฎร์ธานี','ชุมพร','ระนอง','พังงา','ภูเก็ต','สมุทรปราการ','นนทบุรี','ปทุมธานี','อยุธยา','สระบุรี','ลพบุรี','ขอนแก่น','อุดรธานี','อุบลราชธานี','บึงกาฬ','หนองคาย','นครพนม','มหาสารคาม','ร้อยเอ็ด','กาฬสินธุ์','สกลนคร','มุกดาหาร','ชลบุรี','ระยอง','จันทบุรี','ตราด','ฉะเชิงเทรา','ปราจีนบุรี','สระแก้ว','เพชรบุรี','ประจวบคีรีขันธ์','กาญจนบุรี','ราชบุรี','นครปฐม','สมุทรสาคร','สมุทรสงคราม','พระนครศรีอยุธยา','สิงห์บุรี','ชัยนาท','อ่างทอง','นครสวรรค์','อุทัยธานี','กำแพงเพชร','พิจิตร','พิษณุโลก','เพชรบูรณ์','ตาก','สุโขทัย','อุตรดิตถ์','แพร่','น่าน','พะเยา','ลำปาง','ลำพูน','แม่ฮ่องสอน'];
+
+const COLORS=['#C8001A','#1A5FA5','#B45000','#1B6E2F','#534AB7','#888780','#D4537E','#E85D24','#0F6E56'];
+
+let records=[], memberData={}, settings={}, curMemberShop=0, curPeriod='day', charts={}, isAdmin=false;
+
+// ===================================================
+//  STORAGE
+// ===================================================
+function load(){
+  try{records=JSON.parse(localStorage.getItem('dn_rec')||'[]')}catch(e){records=[]}
+  try{memberData=JSON.parse(localStorage.getItem('dn_mem')||'{}')}catch(e){memberData={}}
+  try{
+    const s=JSON.parse(localStorage.getItem('dn_settings')||'{}');
+    settings.shops=s.shops||[...DEFAULT_SHOPS];
+    settings.channels=s.channels||[...DEFAULT_CHANNELS];
+    settings.withWhom=s.withWhom||[...DEFAULT_WITH];
+    settings.localAreas=s.localAreas||[...DEFAULT_LOCAL_AREAS];
+    settings.adminPw=s.adminPw||'admin1234';
+    settings.sheetsUrl=s.sheetsUrl||'';
+    settings.firebaseConfig=s.firebaseConfig||null;
+  }catch(e){
+    settings={shops:[...DEFAULT_SHOPS],channels:[...DEFAULT_CHANNELS],withWhom:[...DEFAULT_WITH],localAreas:[...DEFAULT_LOCAL_AREAS],adminPw:'admin1234'};
+  }
+  // Auto-reconnect Firebase if config was saved (called after app init, not here)
+  if(settings.firebaseConfig){
+    setTimeout(()=>{
+      if(window.initFirebase) window.initFirebase(settings.firebaseConfig);
+    }, 2400);
+  }
+}
+function save(){
+  localStorage.setItem('dn_rec',JSON.stringify(records));
+  localStorage.setItem('dn_mem',JSON.stringify(memberData));
+  localStorage.setItem('dn_settings',JSON.stringify(settings));
+  // Push to Firebase if connected
+  if(window._fbConnected && window.fbPush) window.fbPush();
+  renderDashboardTodayList();
+}
+
+// ===================================================
+//  DATE HELPERS
+// ===================================================
+function todayStr(){return new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'})}
+function dateToKey(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function dateToMonth(d){return d.getFullYear()+'-'+(d.getMonth()+1)}
+function todayKey(){return dateToKey(new Date())}
+function monthKey(){return dateToMonth(new Date())}
+function yearKey(){return new Date().getFullYear()+''}
+function isoToKey(iso){if(!iso)return'';const d=new Date(iso);return dateToKey(d)}
+
+// ===================================================
+//  SPLASH & INIT
+// ===================================================
+load();
+setTimeout(()=>{
+  document.getElementById('splash').classList.add('hide');
+  document.getElementById('appHeader').style.display='flex';
+  document.getElementById('mainContent').style.display='block';
+  document.getElementById('bottomNav').classList.add('visible');
+  initForm();
+  initMemberNav();
+  renderMemberSummary();
+  document.getElementById('today-date').textContent=todayStr();
+  document.getElementById('today-date2').textContent=todayStr();
+  renderDashboardTodayList();
+  populateFirebaseFields();
+  // midnight reset check
+  checkMidnightReset();
+},1800);
+
+function checkMidnightReset(){
+  const lastReset=localStorage.getItem('dn_lastReset');
+  const today=todayKey();
+  if(lastReset!==today){
+    localStorage.setItem('dn_lastReset',today);
+    // member daily data persists (historical), form just resets UI
+  }
+}
+
+// ===================================================
+//  NAVIGATION
+// ===================================================
+function showPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.bot-tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  const tabs={form:0,member:1,dashboard:2,admin:3};
+  const allTabs=document.querySelectorAll('.nav-tab');
+  if(allTabs[tabs[p]])allTabs[tabs[p]].classList.add('active');
+  const botId='bot-'+p;
+  const botEl=document.getElementById(botId);
+  if(botEl)botEl.classList.add('active');
+  if(p==='dashboard'){renderDashboard();renderDashboardTodayList();}
+  if(p==='admin'){if(!isAdmin){openAdminLogin();return;}renderAdmin();renderSettingsUI();}
+  if(p==='member')renderMemberSummary();
+}
+function showAdminTab(t){
+  ['records','settings','password'].forEach(k=>{
+    const el=document.getElementById('admin-tab-'+k);
+    if(el)el.style.display=k===t?'block':'none';
+  });
+  document.querySelectorAll('#page-admin .sub-tab').forEach((tab,i)=>{
+    tab.classList.toggle('active',i===['records','settings','password'].indexOf(t));
+  });
+  if(t==='records')renderAdmin();
+  if(t==='settings'){renderSettingsUI();populateFirebaseFields();}
+}
+
+// ===================================================
+//  ADMIN AUTH
+// ===================================================
+function openAdminLogin(){
+  document.getElementById('login-screen').classList.add('open');
+  document.getElementById('admin-pw-input').value='';
+  document.getElementById('login-err').textContent='';
+  setTimeout(()=>document.getElementById('admin-pw-input').focus(),100);
+}
+function closeAdminLogin(){document.getElementById('login-screen').classList.remove('open')}
+function doAdminLogin(){
+  const pw=document.getElementById('admin-pw-input').value;
+  if(pw===settings.adminPw){
+    isAdmin=true;
+    closeAdminLogin();
+    document.getElementById('header-role-badge').textContent='ADMIN';
+    document.getElementById('header-role-badge').className='role-badge role-admin';
+    document.querySelectorAll('.admin-only').forEach(el=>{el.style.display=el.classList.contains('bot-tab')?'flex':'flex'});
+    document.getElementById('adminLogoutBtn').style.display='block';
+    document.getElementById('adminLoginBtn').style.display='none';
+    showPage('admin');
+    showToast('✓ เข้าสู่ระบบแอดมินแล้ว');
+  } else {
+    document.getElementById('login-err').textContent='รหัสผ่านไม่ถูกต้อง';
+  }
+}
+function adminLogout(){
+  isAdmin=false;
+  document.getElementById('header-role-badge').textContent='STAFF';
+  document.getElementById('header-role-badge').className='role-badge role-staff';
+  document.querySelectorAll('.admin-only').forEach(el=>el.style.display='none');
+  document.getElementById('adminLogoutBtn').style.display='none';
+  document.getElementById('adminLoginBtn').style.display='block';
+  showPage('form');
+  showToast('ออกจากโหมดแอดมินแล้ว');
+}
+function changePassword(){
+  const cur=document.getElementById('pw-current').value;
+  const nw=document.getElementById('pw-new').value;
+  const conf=document.getElementById('pw-confirm').value;
+  if(cur!==settings.adminPw){showToast('รหัสผ่านปัจจุบันไม่ถูกต้อง');return}
+  if(nw.length<4){showToast('รหัสผ่านใหม่ต้องมีอย่างน้อย 4 ตัวอักษร');return}
+  if(nw!==conf){showToast('รหัสผ่านใหม่ไม่ตรงกัน');return}
+  settings.adminPw=nw;save();
+  showToast('✓ เปลี่ยนรหัสผ่านแล้ว');
+  ['pw-current','pw-new','pw-confirm'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ===================================================
+//  ORIGIN CLASSIFICATION
+// ===================================================
+function classifyText(text){
+  if(!text||!text.trim())return null;
+  const t=text.trim().toLowerCase();
+  // Check local areas
+  for(const a of settings.localAreas){
+    if(t.includes(a.toLowerCase())||a.toLowerCase().includes(t))
+      return{type:'local',label:'ในจังหวัด ('+a+')',raw:text.trim()};
+  }
+  // Check thai provinces
+  for(const p of THAI_PROVINCES){
+    if(t.includes(p.toLowerCase())||p.toLowerCase().includes(t))
+      return{type:'thai',label:'ต่างจังหวัด ('+p+')',raw:text.trim()};
+  }
+  // If contains thai characters mostly → thai province not matched
+  const thaiChars=(text.match(/[\u0E00-\u0E7F]/g)||[]).length;
+  const latinChars=(text.match(/[a-zA-Z]/g)||[]).length;
+  if(thaiChars>0&&latinChars===0)
+    return{type:'thai',label:'ต่างจังหวัด ('+text.trim()+')',raw:text.trim()};
+  // Latin text → foreign
+  if(latinChars>0)
+    return{type:'inter',label:'ต่างประเทศ ('+text.trim()+')',raw:text.trim()};
+  return{type:'thai',label:'ต่างจังหวัด ('+text.trim()+')',raw:text.trim()};
+}
+function classifyOrigin(){
+  const text=document.getElementById('f-origin-text').value;
+  const res=classifyText(text);
+  const el=document.getElementById('origin-classified');
+  if(!res){el.innerHTML='';return}
+  const cls=res.type==='local'?'tag-local':res.type==='inter'?'tag-inter':'tag-amber';
+  el.innerHTML=`<span class="origin-tag ${cls}">${res.type==='local'?'🏠':res.type==='inter'?'✈':'🚗'} ${res.label}</span>`;
+}
+function classifyEditOrigin(){
+  const text=document.getElementById('edit-origin-text').value;
+  const res=classifyText(text);
+  const el=document.getElementById('edit-origin-classified');
+  if(!res){el.innerHTML='';return}
+  const cls=res.type==='local'?'tag-local':res.type==='inter'?'tag-inter':'tag-amber';
+  el.innerHTML=`<span class="origin-tag ${cls}">${res.type==='local'?'🏠':res.type==='inter'?'✈':'🚗'} ${res.label}</span>`;
+}
+
+// ===================================================
+//  FORM INIT & SAVE
+// ===================================================
+function initForm(){
+  // service chips
+  const sc=document.getElementById('chips-service');
+  sc.innerHTML=settings.shops.map(s=>`<div class="chip" onclick="toggleChip(this)">${s.icon} ${s.name}</div>`).join('');
+  // channel chips
+  const cc=document.getElementById('chips-channel');
+  cc.innerHTML=settings.channels.map(c=>`<div class="chip" onclick="toggleChip(this)">${c}</div>`).join('');
+}
+function toggleChip(el){el.classList.toggle('selected')}
+function getChips(id){return[...document.querySelectorAll('#'+id+' .chip.selected')].map(c=>c.textContent.trim())}
+
+function saveRecord(){
+  const originText=document.getElementById('f-origin-text').value.trim();
+  if(!originText){showToast('⚠ กรุณาระบุจังหวัด/ประเทศลูกค้า');return}
+  const originData=classifyText(originText)||{type:'thai',label:originText,raw:originText};
+  const rec={
+    id:Date.now(),
+    date:todayKey(),month:monthKey(),year:yearKey(),dateStr:todayStr(),
+    dateISO:new Date().toISOString().slice(0,10),
+    name:document.getElementById('f-name').value.trim(),
+    count:parseInt(document.getElementById('f-count').value)||1,
+    job:document.getElementById('f-job').value.trim(),
+    age:document.getElementById('f-age').value,
+    originText:originData.raw,
+    originType:originData.type,
+    originLabel:originData.label,
+    channels:getChips('chips-channel'),
+    services:getChips('chips-service'),
+    visit:document.getElementById('f-visit').value,
+    withWhom:document.getElementById('f-with').value,
+    feedback:document.getElementById('f-feedback').value.trim()
+  };
+  records.push(rec);save();
+  showToast('✓ บันทึกเรียบร้อย');clearForm();
+}
+function clearForm(){
+  ['f-name','f-origin-text','f-feedback','f-job'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-age').value='';
+  document.getElementById('f-count').value='1';
+  document.getElementById('f-visit').value='first';
+  document.getElementById('f-with').value='';
+  document.getElementById('origin-classified').innerHTML='';
+  document.querySelectorAll('#chips-channel .chip.selected,#chips-service .chip.selected').forEach(c=>c.classList.remove('selected'));
+}
+
+// ===================================================
+//  MEMBER
+// ===================================================
+function initMemberNav(){
+  const nav=document.getElementById('memberSubNav');
+  nav.innerHTML=settings.shops.map((s,i)=>`<div class="sub-tab${i===0?' active':''}" onclick="showMemberShop(${i})">${s.icon} ${s.name.split(' ')[0]}</div>`).join('');
+  showMemberShop(0);
+}
+function showMemberShop(i){
+  curMemberShop=i;
+  document.querySelectorAll('#memberSubNav .sub-tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));
+  const s=settings.shops[i];
+  document.getElementById('member-shop-name').textContent=s.icon+' '+s.name;
+  const key=todayKey()+'-'+i;
+  const d=memberData[key]||{new:0,redeem:0,note:''};
+  document.getElementById('m-new').value=d.new;
+  document.getElementById('m-redeem').value=d.redeem;
+  document.getElementById('m-note').value=d.note;
+}
+function saveMember(){
+  const key=todayKey()+'-'+curMemberShop;
+  memberData[key]={
+    new:parseInt(document.getElementById('m-new').value)||0,
+    redeem:parseInt(document.getElementById('m-redeem').value)||0,
+    note:document.getElementById('m-note').value.trim(),
+    shopIdx:curMemberShop,date:todayKey()
+  };
+  save();showToast('✓ บันทึกสมาชิกแล้ว');renderMemberSummary();
+}
+function renderMemberSummary(){
+  document.getElementById('member-today-summary').innerHTML=settings.shops.map((s,i)=>{
+    const d=memberData[todayKey()+'-'+i]||{new:0,redeem:0};
+    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0ede8;font-size:13px">
+      <span>${s.icon} ${s.name}</span>
+      <span><span class="badge badge-red">+${d.new} สมาชิก</span>&nbsp;<span class="badge badge-amber">แลก ${d.redeem}</span></span>
+    </div>`;
+  }).join('');
+}
+
+// ===================================================
+//  DASHBOARD
+// ===================================================
+function getFiltered(period){
+  if(period==='day') return records.filter(r=>r.date===todayKey());
+  if(period==='month') return records.filter(r=>r.month===monthKey());
+  if(period==='year') return records.filter(r=>r.year===yearKey());
+  if(period==='custom'){
+    const from=document.getElementById('dash-from')?.value;
+    const to=document.getElementById('dash-to')?.value;
+    return records.filter(r=>{
+      if(from&&r.dateISO<from)return false;
+      if(to&&r.dateISO>to)return false;
+      return true;
+    });
+  }
+  return records;
+}
+function getMemberPKey(period){
+  if(period==='day') return todayKey();
+  if(period==='month') return monthKey();
+  if(period==='year') return yearKey();
+  // custom: aggregate all matching dates
+  return null;
+}
+function countBy(arr,key){
+  const res={};
+  arr.forEach(r=>{
+    const vals=Array.isArray(r[key])?r[key]:[r[key]];
+    vals.forEach(v=>{if(v)res[v]=(res[v]||0)+1});
+  });
+  return res;
+}
+function makeChart(id,type,labels,data,colors,extraOpts){
+  if(charts[id])charts[id].destroy();
+  const ctx=document.getElementById(id);if(!ctx)return;
+  const isBar=type==='bar';
+  charts[id]=new Chart(ctx,{type,data:{labels,datasets:[{data,backgroundColor:colors,borderColor:isBar?colors:'#fff',borderWidth:isBar?0:2,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:isBar?{y:{beginAtZero:true,ticks:{font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}:undefined,
+    ...(extraOpts||{})}});
+}
+function makeLegend(id,labels,data,colors){
+  const total=data.reduce((a,b)=>a+b,0)||1;
+  document.getElementById(id).innerHTML=labels.map((l,i)=>`<span class="leg"><span class="leg-dot" style="background:${colors[i%colors.length]}"></span>${l} ${Math.round(data[i]/total*100)}%</span>`).join('');
+}
+function renderDashboard(){
+  const data=getFiltered(curPeriod);
+  const pKey=getMemberPKey(curPeriod);
+  const totalV=data.reduce((a,r)=>a+r.count,0);
+  const firstV=data.filter(r=>r.visit==='first').length;
+  const repeatV=data.filter(r=>r.visit==='repeat').length;
+  const total=data.length||1;
+  const pctNew=Math.round(firstV/total*100);
+  const pctRep=Math.round(repeatV/total*100);
+
+  // member totals
+  let totalNew=0,totalRdm=0;
+  if(pKey){
+    totalNew=settings.shops.reduce((a,_,i)=>a+(memberData[pKey+'-'+i]?.new||0),0);
+    totalRdm=settings.shops.reduce((a,_,i)=>a+(memberData[pKey+'-'+i]?.redeem||0),0);
+  } else {
+    // custom range: sum all member entries
+    Object.values(memberData).forEach(d=>{totalNew+=d.new||0;totalRdm+=d.redeem||0});
+  }
+
+  // range label
+  const rangeLabels={day:'วันนี้ '+todayStr(),month:'เดือน '+new Date().toLocaleDateString('th-TH',{month:'long',year:'numeric'}),year:'ปี '+yearKey(),custom:'ช่วงที่เลือก'};
+  const rl=document.getElementById('dash-range-label');
+  if(rl)rl.textContent=rangeLabels[curPeriod]||'';
+
+  document.getElementById('dash-metrics').innerHTML=`
+    <div class="metric"><div class="metric-val">${totalV}</div><div class="metric-label">ผู้เยี่ยมชม</div></div>
+    <div class="metric"><div class="metric-val">${data.length}</div><div class="metric-label">รายการ</div></div>
+    <div class="metric"><div class="metric-val">${firstV}</div><div class="metric-label">ลูกค้าใหม่</div></div>
+    <div class="metric"><div class="metric-val">${totalNew}</div><div class="metric-label">สมาชิกใหม่</div></div>
+    <div class="metric"><div class="metric-val">${totalRdm}</div><div class="metric-label">แลกพอยท์</div></div>`;
+
+  // New vs Returning %
+  document.getElementById('pct-new').textContent=pctNew+'%';
+  document.getElementById('pct-repeat').textContent=pctRep+'%';
+  makeLegend('legend-visit',['ลูกค้าใหม่','ลูกค้าเก่า'],[firstV,repeatV],['#C8001A','#1A5FA5']);
+  makeChart('chart-visit','doughnut',['ลูกค้าใหม่','ลูกค้าเก่า'],[firstV,repeatV],['#C8001A','#1A5FA5']);
+
+  // Origin type
+  const oTypes={local:0,thai:0,inter:0};
+  data.forEach(r=>oTypes[r.originType]=(oTypes[r.originType]||0)+1);
+  const oL=['ในจังหวัด','ต่างจังหวัด','ต่างประเทศ'],oD=[oTypes.local,oTypes.thai,oTypes.inter],oC=['#C8001A','#B45000','#1A5FA5'];
+  makeLegend('legend-origin',oL,oD,oC);
+  makeChart('chart-origin','doughnut',oL,oD,oC);
+
+  // Channel
+  const chCnt=countBy(data,'channels');const chL=Object.keys(chCnt),chD=Object.values(chCnt);
+  makeLegend('legend-channel',chL,chD,COLORS);makeChart('chart-channel','doughnut',chL,chD,COLORS.slice(0,chL.length));
+
+  // Province breakdown
+  const provCnt={};
+  data.forEach(r=>{if(r.originText)provCnt[r.originText]=(provCnt[r.originText]||0)+r.count});
+  const sorted=Object.entries(provCnt).sort((a,b)=>b[1]-a[1]).slice(0,12);
+  const provL=sorted.map(e=>e[0]),provD=sorted.map(e=>e[1]);
+  const provColors=provL.map(l=>{
+    const raw=l.toLowerCase();
+    const isLocal=settings.localAreas.some(a=>raw.includes(a.toLowerCase()));
+    const isInter=(l.match(/[a-zA-Z]/g)||[]).length>0;
+    return isLocal?'#C8001A':isInter?'#1A5FA5':'#B45000';
+  });
+  makeChart('chart-province','bar',provL,provD,provColors,{
+    indexAxis:'y',
+    scales:{x:{beginAtZero:true,ticks:{font:{size:10}}},y:{ticks:{font:{size:10}}}}
+  });
+
+  // Service
+  const svCnt=countBy(data,'services');const svL=Object.keys(svCnt),svD=Object.values(svCnt);
+  makeLegend('legend-service',svL,svD,COLORS);
+  makeChart('chart-service','bar',svL,svD,COLORS.slice(0,svL.length),{
+    indexAxis:'y',scales:{x:{beginAtZero:true,ticks:{font:{size:10}}},y:{ticks:{font:{size:10}}}}
+  });
+
+  // With whom
+  const wCnt=countBy(data,'withWhom');const wL=Object.keys(wCnt),wD=Object.values(wCnt);
+  makeLegend('legend-with',wL,wD,COLORS);makeChart('chart-with','doughnut',wL,wD,COLORS.slice(0,wL.length));
+
+  // Age
+  const ageCnt=countBy(data,'age');const ageL=Object.keys(ageCnt),ageD=Object.values(ageCnt);
+  makeLegend('legend-age',ageL,ageD,COLORS);makeChart('chart-age','doughnut',ageL,ageD,COLORS.slice(0,ageL.length));
+
+  // Job
+  const jobCnt=countBy(data,'job');const jobL=Object.keys(jobCnt),jobD=Object.values(jobCnt);
+  makeLegend('legend-job',jobL,jobD,COLORS);makeChart('chart-job','bar',jobL,jobD,COLORS.slice(0,jobL.length));
+
+  // Member bar
+  let newData,rdmData;
+  if(pKey){
+    newData=settings.shops.map((_,i)=>memberData[pKey+'-'+i]?.new||0);
+    rdmData=settings.shops.map((_,i)=>memberData[pKey+'-'+i]?.redeem||0);
+  } else {
+    newData=settings.shops.map((_,i)=>{
+      return Object.entries(memberData).filter(([k])=>k.endsWith('-'+i)).reduce((a,[,v])=>a+(v.new||0),0);
+    });
+    rdmData=settings.shops.map((_,i)=>{
+      return Object.entries(memberData).filter(([k])=>k.endsWith('-'+i)).reduce((a,[,v])=>a+(v.redeem||0),0);
+    });
+  }
+  if(charts['chart-member'])charts['chart-member'].destroy();
+  charts['chart-member']=new Chart(document.getElementById('chart-member'),{type:'bar',
+    data:{labels:settings.shops.map(s=>s.icon+' '+s.name.split(' ')[0]),
+      datasets:[{label:'สมาชิกใหม่',data:newData,backgroundColor:'#C8001A'},{label:'แลกพอยท์',data:rdmData,backgroundColor:'#B45000'}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'top',labels:{font:{size:11},boxWidth:12,padding:14}}},
+      scales:{x:{ticks:{font:{size:10}}},y:{beginAtZero:true,ticks:{font:{size:10}}}}}});
+}
+function setPeriod(p,el){
+  curPeriod=p;
+  document.querySelectorAll('.period-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const cr=document.getElementById('custom-range');
+  if(cr)cr.style.display=p==='custom'?'flex':'none';
+  renderDashboard();
+}
+
+// ===================================================
+//  ADMIN - RECORDS
+// ===================================================
+function getFilteredAdmin(){
+  const from=document.getElementById('filter-from')?.value;
+  const to=document.getElementById('filter-to')?.value;
+  let filtered=[...records];
+  if(from)filtered=filtered.filter(r=>r.dateISO>=from);
+  if(to)filtered=filtered.filter(r=>r.dateISO<=to);
+  return filtered.reverse();
+}
+function clearFilter(){
+  document.getElementById('filter-from').value='';
+  document.getElementById('filter-to').value='';
+  renderAdmin();
+}
+function renderAdmin(){
+  const tbody=document.getElementById('admin-tbody');
+  const empty=document.getElementById('admin-empty');
+  const filtered=getFilteredAdmin();
+  document.getElementById('admin-record-count').textContent=`แสดง ${filtered.length} / ${records.length} รายการ`;
+  if(!filtered.length){tbody.innerHTML='';empty.style.display='block';return}
+  empty.style.display='none';
+  const typeCls={local:'badge-red',thai:'badge-amber',inter:'badge-blue'};
+  const typeLabel={local:'ในจังหวัด',thai:'ต่างจังหวัด',inter:'ต่างประเทศ'};
+  tbody.innerHTML=filtered.map(r=>`<tr>
+    <td style="white-space:nowrap">${r.dateStr}</td>
+    <td>${r.name||'—'}</td>
+    <td style="text-align:center">${r.count}</td>
+    <td>${r.job||'—'}</td>
+    <td>${r.age||'—'}</td>
+    <td>${r.originText||'—'}</td>
+    <td><span class="badge ${typeCls[r.originType]||'badge-gray'}">${typeLabel[r.originType]||'—'}</span></td>
+    <td style="max-width:120px">${(r.channels||[]).join(', ')||'—'}</td>
+    <td style="max-width:160px;font-size:11px">${(r.services||[]).join(', ')||'—'}</td>
+    <td>${r.withWhom||'—'}</td>
+    <td><span class="badge ${r.visit==='first'?'badge-red':'badge-gray'}">${r.visit==='first'?'ครั้งแรก':'เคยมา'}</span></td>
+    <td style="max-width:130px;font-size:11px">${r.feedback||'—'}</td>
+    <td><button class="icon-btn" onclick="openEdit(${r.id})">✏️</button></td>
+  </tr>`).join('');
+}
+
+// ===================================================
+//  EDIT RECORD MODAL
+// ===================================================
+function openEdit(id){
+  const rec=records.find(r=>r.id===id);if(!rec)return;
+  // populate edit-with options
+  const ew=document.getElementById('edit-with');
+  ew.innerHTML=settings.withWhom.map(w=>`<option ${rec.withWhom===w?'selected':''}>${w}</option>`).join('');
+  document.getElementById('edit-id').value=id;
+  document.getElementById('edit-name').value=rec.name||'';
+  document.getElementById('edit-count').value=rec.count||1;
+  document.getElementById('edit-job').value=rec.job||'';
+  document.getElementById('edit-age').value=rec.age||'';
+  document.getElementById('edit-origin-text').value=rec.originText||'';
+  document.getElementById('edit-origin-classified').innerHTML='';
+  document.getElementById('edit-visit').value=rec.visit||'first';
+  document.getElementById('edit-channels').value=(rec.channels||[]).join(', ');
+  document.getElementById('edit-services').value=(rec.services||[]).join(', ');
+  document.getElementById('edit-feedback').value=rec.feedback||'';
+  classifyEditOrigin();
+  document.getElementById('editModal').classList.add('open');
+}
+function closeEditModal(){document.getElementById('editModal').classList.remove('open')}
+function saveEditRecord(){
+  const id=parseInt(document.getElementById('edit-id').value);
+  const idx=records.findIndex(r=>r.id===id);if(idx<0)return;
+  const originText=document.getElementById('edit-origin-text').value.trim();
+  const originData=classifyText(originText)||{type:'thai',label:originText,raw:originText};
+  records[idx]={...records[idx],
+    name:document.getElementById('edit-name').value.trim(),
+    count:parseInt(document.getElementById('edit-count').value)||1,
+    job:document.getElementById('edit-job').value.trim(),
+    age:document.getElementById('edit-age').value,
+    originText:originData.raw,originType:originData.type,originLabel:originData.label,
+    visit:document.getElementById('edit-visit').value,
+    withWhom:document.getElementById('edit-with').value,
+    channels:document.getElementById('edit-channels').value.split(',').map(s=>s.trim()).filter(Boolean),
+    services:document.getElementById('edit-services').value.split(',').map(s=>s.trim()).filter(Boolean),
+    feedback:document.getElementById('edit-feedback').value.trim()
+  };
+  save();closeEditModal();renderAdmin();showToast('✓ แก้ไขข้อมูลแล้ว');
+}
+function deleteRecord(){
+  const id=parseInt(document.getElementById('edit-id').value);
+  if(!confirm('ลบรายการนี้?'))return;
+  records=records.filter(r=>r.id!==id);
+  save();closeEditModal();renderAdmin();showToast('ลบรายการแล้ว');
+}
+
+// ===================================================
+//  SETTINGS UI
+// ===================================================
+function renderSettingsUI(){
+  // Sheets URL
+  const su=document.getElementById('sheets-url');
+  if(su)su.value=settings.sheetsUrl||'';
+  // Shops
+  document.getElementById('settings-shops').innerHTML=settings.shops.map((s,i)=>`
+    <li class="settings-item">
+      <span>${s.icon} ${s.name}</span>
+      <span><button class="icon-btn del" onclick="removeShop(${i})">✕</button></span>
+    </li>`).join('');
+  // Channels
+  document.getElementById('settings-channels').innerHTML=settings.channels.map((c,i)=>`
+    <li class="settings-item">
+      <span>${c}</span>
+      <button class="icon-btn del" onclick="removeChannel(${i})">✕</button>
+    </li>`).join('');
+  // With
+  document.getElementById('settings-with').innerHTML=settings.withWhom.map((w,i)=>`
+    <li class="settings-item">
+      <span>${w}</span>
+      <button class="icon-btn del" onclick="removeWith(${i})">✕</button>
+    </li>`).join('');
+  // Local
+  document.getElementById('settings-local').innerHTML=settings.localAreas.map((a,i)=>`
+    <li class="settings-item">
+      <span>${a}</span>
+      <button class="icon-btn del" onclick="removeLocal(${i})">✕</button>
+    </li>`).join('');
+}
+function addShop(){
+  const icon=document.getElementById('new-shop-icon').value.trim()||'🏪';
+  const name=document.getElementById('new-shop-name').value.trim();
+  if(!name){showToast('กรุณาระบุชื่อร้าน');return}
+  settings.shops.push({icon,name});save();
+  document.getElementById('new-shop-icon').value='';document.getElementById('new-shop-name').value='';
+  renderSettingsUI();initForm();initMemberNav();showToast('✓ เพิ่มร้านแล้ว');
+}
+function removeShop(i){
+  if(!confirm('ลบร้านนี้?'))return;
+  settings.shops.splice(i,1);save();renderSettingsUI();initForm();initMemberNav();showToast('ลบร้านแล้ว');
+}
+function addChannel(){
+  const v=document.getElementById('new-channel').value.trim();
+  if(!v)return;settings.channels.push(v);save();
+  document.getElementById('new-channel').value='';renderSettingsUI();initForm();showToast('✓ เพิ่มช่องทางแล้ว');
+}
+function removeChannel(i){settings.channels.splice(i,1);save();renderSettingsUI();initForm();showToast('ลบช่องทางแล้ว')}
+function addWith(){
+  const v=document.getElementById('new-with').value.trim();
+  if(!v)return;settings.withWhom.push(v);save();
+  document.getElementById('new-with').value='';renderSettingsUI();showToast('✓ เพิ่มแล้ว');
+}
+function removeWith(i){settings.withWhom.splice(i,1);save();renderSettingsUI();showToast('ลบแล้ว')}
+function addLocal(){
+  const v=document.getElementById('new-local').value.trim();
+  if(!v)return;settings.localAreas.push(v);save();
+  document.getElementById('new-local').value='';renderSettingsUI();showToast('✓ เพิ่มพื้นที่แล้ว');
+}
+function removeLocal(i){settings.localAreas.splice(i,1);save();renderSettingsUI();showToast('ลบแล้ว')}
+
+// ===================================================
+//  GOOGLE SHEETS SYNC
+// ===================================================
+async function pushToSheets(){
+  const url=(settings.sheetsUrl||'').trim();
+  if(!url){showToast('⚠ กรุณาใส่ Google Apps Script URL ในหน้าตั้งค่า');return}
+  if(!records.length){showToast('ยังไม่มีข้อมูล');return}
+  const btn=document.getElementById('sheets-push-btn');
+  if(btn){btn.textContent='⏳ กำลังส่ง...';btn.disabled=true}
+  try{
+    const payload={action:'push',records:records.map(r=>({id:r.id,date:r.dateStr,name:r.name||'',count:r.count,job:r.job||'',age:r.age||'',originText:r.originText||'',originType:r.originType||'',channels:(r.channels||[]).join(', '),services:(r.services||[]).join(', '),visit:r.visit,withWhom:r.withWhom||'',feedback:r.feedback||''})),members:Object.entries(memberData).map(([k,v])=>({key:k,new:v.new||0,redeem:v.redeem||0,note:v.note||'',date:v.date||''}))};
+    const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const json=await res.json();
+    if(json.status==='ok'){showToast('✓ ส่งข้อมูลไป Google Sheets แล้ว ('+json.rows+' แถว)');settings.lastSync=new Date().toLocaleString('th-TH');save();const ls=document.getElementById('last-sync-label');if(ls)ls.textContent='ซิงค์ล่าสุด: '+settings.lastSync;}
+    else{showToast('❌ ส่งไม่สำเร็จ: '+(json.message||'error'));}
+  }catch(e){showToast('❌ เชื่อมต่อไม่ได้ — ตรวจสอบ URL');console.error(e);}
+  finally{if(btn){btn.textContent='☁ ส่งไป Google Sheets';btn.disabled=false}}
+}
+function saveSheetUrl(){const url=(document.getElementById('sheets-url')?.value||'').trim();settings.sheetsUrl=url;save();showToast('✓ บันทึก URL แล้ว');}
+
+// ===================================================
+//  EXPORT & CLEAR
+// ===================================================
+function exportCSV(){
+  if(!records.length){showToast('ยังไม่มีข้อมูล');return}
+  const h=['วันที่','ชื่อ','จำนวน','อาชีพ','อายุ','จังหวัด/ที่มา','ประเภท','ช่องทาง','บริการ','มากับ','เยี่ยมชม','ติชม'];
+  const rows=records.map(r=>[r.dateStr,r.name,r.count,r.job,r.age,r.originText,r.originType,
+    (r.channels||[]).join('|'),(r.services||[]).join('|'),r.withWhom,r.visit,r.feedback
+  ].map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv='\uFEFF'+[h.join(','),...rows].join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='dinnano_'+todayKey()+'.csv';a.click();
+  showToast('✓ ส่งออก CSV แล้ว');
+}
+function clearAll(){
+  if(!confirm('ลบข้อมูลทั้งหมด?\nไม่สามารถย้อนกลับได้'))return;
+  records=[];save();renderAdmin();showToast('ลบทั้งหมดแล้ว');
+}
+
+// ===================================================
+//  FIREBASE HELPERS
+// ===================================================
+function populateFirebaseFields(){
+  const cfg = settings.firebaseConfig || {};
+  const ak = document.getElementById('fb-apiKey'); if(ak) ak.value = cfg.apiKey||'';
+  const pi = document.getElementById('fb-projectId'); if(pi) pi.value = cfg.projectId||'';
+  const du = document.getElementById('fb-dbUrl'); if(du) du.value = cfg.databaseURL||'';
+}
+function saveAndConnectFirebase(){
+  const apiKey=(document.getElementById('fb-apiKey')?.value||'').trim();
+  const projectId=(document.getElementById('fb-projectId')?.value||'').trim();
+  const databaseURL=(document.getElementById('fb-dbUrl')?.value||'').trim();
+  if(!apiKey||!projectId||!databaseURL){showToast('⚠ กรุณากรอก API Key, Project ID และ Database URL');return}
+  const cfg={apiKey,authDomain:projectId+'.firebaseapp.com',projectId,databaseURL,storageBucket:projectId+'.appspot.com',messagingSenderId:'',appId:''};
+  settings.firebaseConfig=cfg;
+  localStorage.setItem('dn_settings',JSON.stringify(settings));
+  const syncEl=document.getElementById('fb-sync-status');
+  if(syncEl)syncEl.textContent='🟡 กำลังเชื่อมต่อ...';
+  // Reset so initFirebase creates fresh connection
+  window._fbApp=null; window._fbDb=null; window._fbRef=null; window._fbConnected=false;
+  window.initFirebase(cfg).then(ok=>{
+    if(ok){showToast('✓ เชื่อมต่อ Firebase แล้ว — ข้อมูลจะ sync อัตโนมัติ');}
+    else{showToast('❌ เชื่อมต่อ Firebase ไม่ได้ — ตรวจสอบ config');}
+  });
+}
+function fbPushNow(){
+  if(!window._fbConnected){showToast('⚠ ยังไม่ได้เชื่อมต่อ Firebase');return}
+  window.fbPush();showToast('✓ Push ข้อมูลขึ้น Firebase แล้ว');
+}
+
+// ===================================================
+//  DASHBOARD TODAY LIST
+// ===================================================
+function renderDashboardTodayList(){
+  const tbody=document.getElementById('dash-today-tbody');
+  const empty=document.getElementById('dash-today-empty');
+  const countEl=document.getElementById('dash-today-count');
+  if(!tbody)return;
+  const today=todayKey();
+  const todayRecs=[...records].filter(r=>r.date===today).reverse();
+  if(countEl)countEl.textContent=`${todayRecs.length} รายการ · ${todayRecs.reduce((a,r)=>a+r.count,0)} ท่าน`;
+  if(!todayRecs.length){tbody.innerHTML='';if(empty)empty.style.display='block';return;}
+  if(empty)empty.style.display='none';
+  const typeCls={local:'badge-red',thai:'badge-amber',inter:'badge-blue'};
+  const typeLabel={local:'ในจังหวัด',thai:'ต่างจังหวัด',inter:'ต่างประเทศ'};
+  tbody.innerHTML=todayRecs.map((r,i)=>`<tr>
+    <td style="color:var(--gray2);font-size:11px">${todayRecs.length-i}</td>
+    <td style="font-weight:500">${r.name||'—'}</td>
+    <td style="text-align:center">${r.count}</td>
+    <td style="max-width:100px;font-size:12px">${r.originText||'—'}</td>
+    <td><span class="badge ${typeCls[r.originType]||'badge-gray'}">${typeLabel[r.originType]||'—'}</span></td>
+    <td style="font-size:11px;max-width:100px">${(r.channels||[]).join(', ')||'—'}</td>
+    <td style="font-size:11px;max-width:130px">${(r.services||[]).join(', ')||'—'}</td>
+    <td style="font-size:12px">${r.withWhom||'—'}</td>
+    <td><span class="badge ${r.visit==='first'?'badge-red':'badge-gray'}">${r.visit==='first'?'ครั้งแรก':'เคยมา'}</span></td>
+    <td style="font-size:11px;color:var(--gray2);white-space:nowrap">${r.id?new Date(r.id).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}):'—'}</td>
+  </tr>`).join('');
+}
+
+// ===================================================
+//  TOAST
+// ===================================================
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+</script>
+</body>
+</html>
